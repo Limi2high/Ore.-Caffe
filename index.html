@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orë — Always Open</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --charcoal: #1A1815;
+    --charcoal-2: #24211C;
+    --amber: #E8A33D;
+    --cream: #F2ECE1;
+    --cream-dim: #C9C2B4;
+    --rust: #8B4A3B;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--charcoal);
+    color: var(--cream);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    line-height: 1.1;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  .wrap {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    background: rgba(26, 24, 21, 0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(242, 236, 225, 0.08);
+  }
+  nav .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+  }
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    letter-spacing: 0.5px;
+  }
+  .logo span { color: var(--amber); }
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    font-size: 15px;
+    color: var(--cream-dim);
+  }
+  .nav-links a:hover { color: var(--cream); }
+  .nav-cta {
+    background: var(--amber);
+    color: var(--charcoal);
+    padding: 10px 22px;
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  @media (max-width: 720px) {
+    .nav-links { display: none; }
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 72px;
+    position: relative;
+  }
+  .hero .wrap {
+    display: grid;
+    grid-template-columns: 1.3fr 0.9fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .hero-eyebrow {
+    color: var(--amber);
+    font-size: 15px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: clamp(42px, 6vw, 72px);
+    max-width: 11ch;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--amber);
+  }
+  .hero p {
+    margin-top: 24px;
+    color: var(--cream-dim);
+    font-size: 18px;
+    max-width: 42ch;
+  }
+  .hero-buttons {
+    margin-top: 36px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--amber);
+    color: var(--charcoal);
+    padding: 14px 28px;
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 15px;
+  }
+  .btn-secondary {
+    border: 1px solid rgba(242, 236, 225, 0.25);
+    padding: 14px 28px;
+    border-radius: 3px;
+    font-size: 15px;
+    color: var(--cream);
+  }
+
+  /* CLOCK CARD */
+  .clock-card {
+    background: var(--charcoal-2);
+    border: 1px solid rgba(242, 236, 225, 0.08);
+    border-radius: 4px;
+    padding: 36px;
+    position: relative;
+  }
+  .clock-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--amber);
+  }
+  .clock-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--amber);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--amber);
+    box-shadow: 0 0 0 4px rgba(232, 163, 61, 0.2);
+  }
+  .clock-time {
+    font-family: 'Fraunces', serif;
+    font-size: 56px;
+    margin-top: 14px;
+  }
+  .clock-days {
+    margin-top: 26px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+  }
+  .clock-days div {
+    text-align: center;
+    font-size: 12px;
+    color: var(--cream-dim);
+    padding: 8px 0;
+    border-radius: 2px;
+    background: rgba(242, 236, 225, 0.04);
+  }
+  .clock-days div.today {
+    background: var(--amber);
+    color: var(--charcoal);
+    font-weight: 600;
+  }
+  .clock-note {
+    margin-top: 20px;
+    font-size: 14px;
+    color: var(--cream-dim);
+  }
+
+  /* SECTION HEADER */
+  .section-head {
+    max-width: 46ch;
+    margin-bottom: 56px;
+  }
+  .section-head h2 {
+    font-size: clamp(30px, 4vw, 42px);
+  }
+  .section-head p {
+    color: var(--cream-dim);
+    margin-top: 14px;
+    font-size: 16px;
+  }
+
+  section { padding: 110px 0; }
+
+  /* WHY */
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(242, 236, 225, 0.08);
+    border: 1px solid rgba(242, 236, 225, 0.08);
+  }
+  .why-item {
+    background: var(--charcoal);
+    padding: 36px 30px;
+  }
+  .why-item h3 {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    color: var(--amber);
+  }
+  .why-item p {
+    color: var(--cream-dim);
+    font-size: 15px;
+  }
+  @media (max-width: 780px) {
+    .why-grid { grid-template-columns: 1fr; }
+    .hero .wrap { grid-template-columns: 1fr; }
+  }
+
+  /* MENU */
+  .menu {
+    background: var(--charcoal-2);
+  }
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 48px 60px;
+  }
+  .menu-col h3 {
+    font-size: 22px;
+    color: var(--amber);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(242, 236, 225, 0.12);
+  }
+  .menu-line {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px dashed rgba(242, 236, 225, 0.1);
+  }
+  .menu-line:last-child { border-bottom: none; }
+  .menu-line span:first-child { font-size: 16px; }
+  .menu-line span:last-child { color: var(--cream-dim); font-size: 15px; white-space: nowrap; }
+  @media (max-width: 720px) {
+    .menu-grid { grid-template-columns: 1fr; }
+  }
+
+  /* TIMELINE */
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+    border-left: 1px solid rgba(242, 236, 225, 0.12);
+  }
+  .timeline-item {
+    position: relative;
+    padding-bottom: 40px;
+  }
+  .timeline-item:last-child { padding-bottom: 0; }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -37px;
+    top: 4px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--charcoal);
+    border: 2px solid var(--amber);
+  }
+  .timeline-time {
+    color: var(--amber);
+    font-size: 14px;
+    letter-spacing: 0.5px;
+  }
+  .timeline-item h3 {
+    font-size: 20px;
+    margin-top: 6px;
+    font-weight: 500;
+  }
+  .timeline-item p {
+    color: var(--cream-dim);
+    font-size: 15px;
+    margin-top: 6px;
+    max-width: 50ch;
+  }
+
+  /* VISIT */
+  .visit {
+    background: var(--charcoal-2);
+  }
+  .visit-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+  }
+  .visit-info p { color: var(--cream-dim); margin-bottom: 10px; }
+  .visit-info strong { color: var(--cream); }
+  .map-block {
+    background: var(--charcoal);
+    border: 1px solid rgba(242, 236, 225, 0.08);
+    border-radius: 4px;
+    height: 100%;
+    min-height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cream-dim);
+    font-size: 14px;
+  }
+  @media (max-width: 720px) {
+    .visit-grid { grid-template-columns: 1fr; }
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 48px 0;
+    border-top: 1px solid rgba(242, 236, 225, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 14px;
+    color: var(--cream-dim);
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo">Orë<span>.</span></div>
+    <div class="nav-links">
+      <a href="#why">Why us</a>
+      <a href="#menu">Menu</a>
+      <a href="#hours">Hours</a>
+      <a href="#visit">Visit</a>
+    </div>
+    <a href="#visit" class="nav-cta">Find us</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="hero-eyebrow">A bar & café in Tirana</div>
+      <h1>Open when <em>everyone else</em> is closed.</h1>
+      <p>Coffee at 4am. A drink at noon. No last call, no closing time — just a room that's always ready for you.</p>
+      <div class="hero-buttons">
+        <a href="#visit" class="btn-primary">Get directions</a>
+        <a href="#menu" class="btn-secondary">See the menu</a>
+      </div>
+    </div>
+    <div class="clock-card">
+      <div class="clock-status"><span class="dot"></span> Open right now</div>
+      <div class="clock-time">24 / 7</div>
+      <div class="clock-days">
+        <div>Mon</div><div>Tue</div><div class="today">Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div>
+      </div>
+      <p class="clock-note">Every day, every hour. We don't have a closing shift — just a next shift.</p>
+    </div>
+  </div>
+</section>
+
+<section id="why">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Built around your hours, not ours.</h2>
+      <p>Whatever brought you in — a night shift, an early flight, or just insomnia — there's a seat and something warm waiting.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-item">
+        <h3>No wrong time</h3>
+        <p>3pm meeting or 3am debrief — the kitchen and the bar run the same menu, always.</p>
+      </div>
+      <div class="why-item">
+        <h3>Quiet when you need it</h3>
+        <p>Corners for laptops and long conversations, a bar for the nights that need noise.</p>
+      </div>
+      <div class="why-item">
+        <h3>Local, not corporate</h3>
+        <p>Independently run, sourcing from nearby roasters and producers — not a franchise playbook.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="menu" id="menu">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>One menu, all hours.</h2>
+      <p>Nothing switches off after breakfast. Order a espresso at midnight or a drink at 9am — same kitchen, same bar.</p>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-col">
+        <h3>Coffee & Café</h3>
+        <div class="menu-line"><span>Espresso</span><span>250 L</span></div>
+        <div class="menu-line"><span>Cappuccino</span><span>300 L</span></div>
+        <div class="menu-line"><span>Filter coffee, single origin</span><span>350 L</span></div>
+        <div class="menu-line"><span>Byrek, spinach & cheese</span><span>200 L</span></div>
+        <div class="menu-line"><span>Toast, feta & honey</span><span>400 L</span></div>
+      </div>
+      <div class="menu-col">
+        <h3>Bar</h3>
+        <div class="menu-line"><span>House amber cocktail</span><span>700 L</span></div>
+        <div class="menu-line"><span>Local draft beer</span><span>350 L</span></div>
+        <div class="menu-line"><span>Raki, aged</span><span>300 L</span></div>
+        <div class="menu-line"><span>Wine, glass</span><span>500 L</span></div>
+        <div class="menu-line"><span>Late-night snacks</span><span>from 250 L</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="hours">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>A day that never resets.</h2>
+      <p>There's no opening or closing announcement — just a room that changes character as the hours pass.</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-time">06:00 — 10:00</div>
+        <h3>Early counter</h3>
+        <p>Quiet, coffee-first crowd. Regulars before work, night-shift workers heading home.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-time">10:00 — 17:00</div>
+        <h3>Café hours</h3>
+        <p>Laptops, meetings, slow lunches. Full food menu running alongside the espresso bar.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-time">17:00 — 00:00</div>
+        <h3>Bar shift</h3>
+        <p>The room turns over — drinks, music picks up, kitchen switches to the late menu.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-time">00:00 — 06:00</div>
+        <h3>After hours</h3>
+        <p>The quietest and most loyal crowd. Still fully staffed, still fully open.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="visit" id="visit">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Come by, any hour.</h2>
+    </div>
+    <div class="visit-grid">
+      <div class="visit-info">
+        <p><strong>Address</strong><br>Rruga e Kavajës, Tirana, Albania</p>
+        <p><strong>Hours</strong><br>Open every day, all day — 24/7</p>
+        <p><strong>Contact</strong><br>+355 6X XXX XXXX &nbsp;·&nbsp; hello@ore.al</p>
+      </div>
+      <div class="map-block">Map placeholder — embed on request</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex; justify-content:space-between; width:100%; flex-wrap:wrap; gap:16px;">
+    <span>Orë — a concept design, built as a demo project.</span>
+    <span>Design & build by Limi</span>
+  </div>
+</footer>
+
+</body>
+</html>
